@@ -55,20 +55,13 @@ import { configValidationSchema } from './config.schema';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
-        const isProduction = configService.get('STAGE') === 'prod';
+        const isProduction = configService.get('NODE_ENV') === 'production';
         return {
           type: 'postgres',
           autoLoadEntities: true,
           synchronize: true,
-          host: isProduction ? undefined : configService.get('DB_HOST'),
-          port: isProduction ? undefined : configService.get('DB_PORT'),
-          username: isProduction ? undefined : configService.get('DB_USERNAME'),
-          password: isProduction ? undefined : configService.get('DB_PASSWORD'),
-          database: isProduction ? undefined : configService.get('DB_DATABASE'),
-          ssl: isProduction,  // Set SSL only in production
-          extra: {
-            ssl: isProduction ? { rejectUnauthorized: false } : null,  // Corrected property name
-          },
+          url: isProduction ? process.env.DATABASE_URL : undefined,
+          ssl: isProduction ? { rejectUnauthorized: false } : false,
         };
       },
     }),
