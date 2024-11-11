@@ -7,7 +7,7 @@ import { JwtPayload } from "./jwt-payload.interface";
 import { User } from "./user.entity";
 
 @Injectable()
- export class JwtStartegy extends PassportStrategy(Strategy) {
+ export class JwtStrategy extends PassportStrategy(Strategy) {
     constructor (
         @InjectRepository(UsersRepository)
         private usersRepository: UsersRepository,
